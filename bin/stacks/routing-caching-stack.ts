@@ -121,7 +121,7 @@ export class RoutingCachingStack extends cdk.NestedStack {
         }
       )
       new aws_events.Rule(this, `SchedulePoolCache-ChainId${chainId}-Protocol${protocol}`, {
-        schedule: aws_events.Schedule.rate(Duration.minutes(15)),
+        schedule: aws_events.Schedule.rate(Duration.minutes(5)),
         targets: [new aws_events_targets.LambdaFunction(lambda)],
       })
       this.poolCacheBucket2.grantReadWrite(lambda)

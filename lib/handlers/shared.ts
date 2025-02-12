@@ -1,6 +1,7 @@
-import { ChainId, Currency, Percent } from '@uniswap/sdk-core'
+import { Currency, Percent } from '@uniswap/sdk-core'
 import {
   AlphaRouterConfig,
+  ChainId,
   ITokenListProvider,
   ITokenProvider,
   MapWithLowerCaseKey,
@@ -16,6 +17,7 @@ export const SECONDS_PER_BLOCK_BY_CHAIN_ID: { [chainId in ChainId]?: number } = 
 
 export const DEFAULT_ROUTING_CONFIG_BY_CHAIN = (chainId: ChainId): AlphaRouterConfig => {
   switch (chainId) {
+    case ChainId.DOGE_SEPOLIA:
     case ChainId.BASE:
     case ChainId.OPTIMISM:
       return {

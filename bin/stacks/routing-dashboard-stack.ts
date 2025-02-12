@@ -1,4 +1,4 @@
-import { ChainId } from '@uniswap/sdk-core'
+import { ChainId } from '@uniswap/smart-order-router'
 import * as cdk from 'aws-cdk-lib'
 import * as aws_cloudwatch from 'aws-cdk-lib/aws-cloudwatch'
 import { Construct } from 'constructs'
@@ -41,6 +41,7 @@ export class RoutingDashboardStack extends cdk.NestedStack {
       ChainId.SEPOLIA,
       ChainId.CELO_ALFAJORES,
       ChainId.BASE_GOERLI,
+      ChainId.DOGE_SEPOLIA,
     ]
 
     const MAINNETS = SUPPORTED_CHAINS.filter((chain) => !TESTNETS.includes(chain))

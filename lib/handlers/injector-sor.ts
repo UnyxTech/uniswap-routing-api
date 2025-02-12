@@ -1,4 +1,4 @@
-import { ChainId, Token } from '@uniswap/sdk-core'
+import { Token } from '@uniswap/sdk-core'
 import {
   CachingGasStationProvider,
   CachingTokenListProvider,
@@ -30,7 +30,11 @@ import {
   V2QuoteProvider,
   V3PoolProvider,
   IRouteCachingProvider,
+  ChainId,
   CachingV2PoolProvider,
+  TokenValidatorProvider,
+  ITokenPropertiesProvider,
+  TokenPropertiesProvider,
 } from '@uniswap/smart-order-router'
 import { TokenList } from '@uniswap/token-lists'
 import { default as bunyan, default as Logger } from 'bunyan'
@@ -48,6 +52,7 @@ import { DefaultEVMClient } from './evm/EVMClient'
 import { InstrumentedEVMProvider } from './evm/provider/InstrumentedEVMProvider'
 import { deriveProviderName } from './evm/provider/ProviderName'
 import { V2DynamoCache } from './pools/pool-caching/v2/v2-dynamo-cache'
+import { OnChainTokenFeeFetcher } from '@uniswap/smart-order-router/build/main/providers/token-fee-fetcher'
 
 export const SUPPORTED_CHAINS: ChainId[] = [
   ChainId.MAINNET,
@@ -63,6 +68,7 @@ export const SUPPORTED_CHAINS: ChainId[] = [
   ChainId.BNB,
   ChainId.AVALANCHE,
   ChainId.BASE,
+  ChainId.DOGE_SEPOLIA,
 ]
 const DEFAULT_TOKEN_LIST = 'https://gateway.ipfs.io/ipns/tokens.uniswap.org'
 
@@ -94,6 +100,8 @@ export type ContainerDependencies = {
   v2QuoteProvider: V2QuoteProvider
   simulator: Simulator
   routeCachingProvider?: IRouteCachingProvider
+  tokenValidatorProvider: TokenValidatorProvider
+  tokenPropertiesProvider: ITokenPropertiesProvider
 }
 
 export interface ContainerInjected {
@@ -190,7 +198,20 @@ export abstract class InjectorSOR<Router, QueryParams> extends Injector<
             sourceOfTruthPoolProvider: noCacheV3PoolProvider,
           })
 
-          const underlyingV2PoolProvider = new V2PoolProvider(chainId, multicall2Provider)
+          const tokenFeeFetcher = new OnChainTokenFeeFetcher(chainId, provider)
+          const tokenValidatorProvider = new TokenValidatorProvider(
+            chainId,
+            multicall2Provider,
+            new NodeJSCache(new NodeCache({ stdTTL: 30000, useClones: false }))
+          )
+          const tokenPropertiesProvider = new TokenPropertiesProvider(
+            chainId,
+            tokenValidatorProvider,
+            new NodeJSCache(new NodeCache({ stdTTL: 30000, useClones: false })),
+            tokenFeeFetcher
+          )
+          const underlyingV2PoolProvider = new V2PoolProvider(chainId, multicall2Provider, tokenPropertiesProvider)
+
           const v2PoolProvider = new CachingV2PoolProvider(
             chainId,
             underlyingV2PoolProvider,
@@ -239,6 +260,7 @@ export abstract class InjectorSOR<Router, QueryParams> extends Injector<
           // 200*725k < 150m
           let quoteProvider: OnChainQuoteProvider | undefined = undefined
           switch (chainId) {
+            case ChainId.DOGE_SEPOLIA:
             case ChainId.BASE:
             case ChainId.OPTIMISM:
               quoteProvider = new OnChainQuoteProvider(
@@ -251,17 +273,17 @@ export abstract class InjectorSOR<Router, QueryParams> extends Injector<
                   maxTimeout: 1000,
                 },
                 {
-                  multicallChunk: 110,
+                  multicallChunk: 24,
                   gasLimitPerCall: 1_200_000,
                   quoteMinSuccessRate: 0.1,
                 },
                 {
-                  gasLimitOverride: 3_000_000,
-                  multicallChunk: 45,
+                  gasLimitOverride: 1_000_000,
+                  multicallChunk: 24,
                 },
                 {
-                  gasLimitOverride: 3_000_000,
-                  multicallChunk: 45,
+                  gasLimitOverride: 1_000_000,
+                  multicallChunk: 24,
                 },
                 {
                   baseBlockOffset: -25,
@@ -359,6 +381,8 @@ export abstract class InjectorSOR<Router, QueryParams> extends Injector<
               v2SubgraphProvider,
               simulator,
               routeCachingProvider,
+              tokenValidatorProvider,
+              tokenPropertiesProvider,
             },
           }
         })

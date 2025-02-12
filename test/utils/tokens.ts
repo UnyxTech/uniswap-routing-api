@@ -1,7 +1,8 @@
 import DEFAULT_TOKEN_LIST from '@uniswap/default-token-list'
-import { ChainId, Token } from '@uniswap/sdk-core'
+import { Token } from '@uniswap/sdk-core'
 import {
   CachingTokenListProvider,
+  ChainId,
   DAI_ARBITRUM,
   DAI_AVAX,
   DAI_BNB,
@@ -32,6 +33,7 @@ import {
   WRAPPED_NATIVE_CURRENCY,
   USDC_BASE,
   USDC_BASE_GOERLI,
+  USDC_DOGE_SEPOLIA,
 } from '@uniswap/smart-order-router'
 import { ethers } from 'ethers'
 import NodeCache from 'node-cache'
@@ -132,6 +134,8 @@ export const USDC_ON = (chainId: ChainId): Token => {
       return USDC_BASE
     case ChainId.BASE_GOERLI:
       return USDC_BASE_GOERLI
+    case ChainId.DOGE_SEPOLIA:
+      return USDC_DOGE_SEPOLIA
     default:
       throw new Error(`Chain id: ${chainId} not supported`)
   }
