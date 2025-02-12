@@ -2,7 +2,9 @@
   "compilerOptions": {
     "target": "ES2018",
     "module": "commonjs",
-    "lib": ["es2018"],
+    "lib": [
+      "es2018"
+    ],
     "declaration": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
@@ -20,8 +22,16 @@
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
     "outDir": "dist",
-    "typeRoots": ["./node_modules/@types"]
+    "typeRoots": [
+      "./node_modules/@types"
+    ]
   },
-  "files": ["./hardhat.config.js"],
-  "exclude": ["cdk.out", "./dist/**/*"]
+  "files": [
+    "./hardhat.config.js"
+  ],
+  "exclude": [
+    "cdk.out",
+    "./dist/**/*",
+    "./deps/**/*"
+  ]
 }
