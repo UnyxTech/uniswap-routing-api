@@ -70,7 +70,8 @@ export const SUPPORTED_CHAINS: ChainId[] = [
   ChainId.BASE,
   ChainId.DOGE_SEPOLIA,
 ]
-const DEFAULT_TOKEN_LIST = 'https://gateway.ipfs.io/ipns/tokens.uniswap.org'
+// const DEFAULT_TOKEN_LIST = 'https://gateway.ipfs.io/ipns/tokens.uniswap.org'
+const DEFAULT_TOKEN_LIST = 'https://raw.githubusercontent.com/The-Blockchain-Association/sec-notice-list/master/ba-sec-list.json'
 
 export interface RequestInjected<Router> extends BaseRInj {
   chainId: ChainId
