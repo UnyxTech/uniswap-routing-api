@@ -1,4 +1,5 @@
 import {
+  LegacyRouter,
   AlphaRouter,
   AlphaRouterConfig,
   ID_TO_CHAIN_ID,
@@ -7,6 +8,7 @@ import {
   setGlobalLogger,
   setGlobalMetric,
   V3HeuristicGasModelFactory,
+  OnChainQuoteProvider,
 } from '@uniswap/smart-order-router'
 import { MetricsLogger } from 'aws-embedded-metrics'
 import { APIGatewayProxyEvent, Context } from 'aws-lambda'
@@ -92,9 +94,7 @@ export class QuoteHandlerInjector extends InjectorSOR<
       v2SubgraphProvider,
       gasPriceProvider: gasPriceProviderOnChain,
       simulator,
-      // routeCachingProvider,
-      // tokenPropertiesProvider,
-      // tokenValidatorProvider,
+      routeCachingProvider,
     } = dependencies[chainIdEnum]!
 
     let onChainQuoteProvider = dependencies[chainIdEnum]!.onChainQuoteProvider
@@ -106,6 +106,19 @@ export class QuoteHandlerInjector extends InjectorSOR<
 
     let router
     switch (algorithm) {
+      case 'legacy':
+        router = new LegacyRouter({
+          chainId: chainId,
+          multicall2Provider: multicallProvider,
+          poolProvider: v3PoolProvider,
+          quoteProvider: new OnChainQuoteProvider(
+            chainId,
+            provider,
+            multicallProvider
+          ),
+          tokenProvider: tokenProvider,
+        })
+        break
       case 'alpha':
       default:
         router = new AlphaRouter({
@@ -119,13 +132,11 @@ export class QuoteHandlerInjector extends InjectorSOR<
           v3GasModelFactory: new V3HeuristicGasModelFactory(),
           blockedTokenListProvider,
           tokenProvider,
-          // v2PoolProvider,
+          v2PoolProvider,
           v2QuoteProvider,
           v2SubgraphProvider,
           simulator,
-          // routeCachingProvider,
-          // tokenPropertiesProvider,
-          // tokenValidatorProvider,
+          routeCachingProvider,
         })
         break
     }
