@@ -375,9 +375,9 @@ export class QuoteHandler extends APIGLambdaHandler<
           swapParams,
           intent,
         })
-        console.log('uniswap-routing-api:378 type = exactIn end',currencyIn.symbol)
+        console.log('api:378 type = exactIn end',currencyIn.symbol)
         swapRoute = await router.route(amount, currencyOut, TradeType.EXACT_INPUT, swapParams, routingConfig)
-        console.log('uniswap-routing-api:380 type = exactIn end',currencyIn.symbol)
+        console.log('api:380 type = exactIn end',currencyIn.symbol)
         break
       case 'exactOut':
         amount = CurrencyAmount.fromRawAmount(currencyOut, JSBI.BigInt(amountRaw))
@@ -424,7 +424,7 @@ export class QuoteHandler extends APIGLambdaHandler<
       default:
         throw new Error('Invalid swap type')
     }
-    console.log('uniswap-routing-api:427', currencyIn.symbol)
+    console.log('api:427', currencyIn.symbol)
     if (!swapRoute) {
       log.info(
         {
@@ -442,7 +442,7 @@ export class QuoteHandler extends APIGLambdaHandler<
         detail: 'No route found',
       }
     }
-    console.log('uniswap-routing-api:444', currencyIn.symbol)
+    console.log('api:444', currencyIn.symbol)
     const {
       quote,
       quoteGasAdjusted,
@@ -457,7 +457,7 @@ export class QuoteHandler extends APIGLambdaHandler<
       hitsCachedRoute,
     } = swapRoute
 
-    console.log('uniswap-routing-api:460', currencyIn.symbol)
+    console.log('api:460', currencyIn.symbol)
     if (simulationStatus == SimulationStatus.Failed) {
       metric.putMetric('SimulationFailed', 1, MetricLoggerUnit.Count)
     } else if (simulationStatus == SimulationStatus.Succeeded) {
@@ -471,7 +471,7 @@ export class QuoteHandler extends APIGLambdaHandler<
     }
 
     const routeResponse: Array<(V3PoolInRoute | V2PoolInRoute)[]> = []
-    console.log('uniswap-routing-api:473', currencyIn.symbol)
+    console.log('api:473', currencyIn.symbol)
     for (const subRoute of route) {
       const { amount, quote, tokenPath } = subRoute
 
@@ -560,7 +560,7 @@ export class QuoteHandler extends APIGLambdaHandler<
 
       routeResponse.push(curRoute)
     }
-    console.log('uniswap-routing-api:562', currencyIn.symbol)
+    console.log('api:562', currencyIn.symbol)
     const routeString = routeAmountsToString(route)
 
     const result: QuoteResponse = {
@@ -584,7 +584,7 @@ export class QuoteHandler extends APIGLambdaHandler<
       quoteId,
       hitsCachedRoutes: hitsCachedRoute,
     }
-    console.log('uniswap-routing-api:586', currencyIn.symbol)
+    console.log('api:586', currencyIn.symbol)
     this.logRouteMetrics(
       log,
       metric,

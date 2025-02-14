@@ -117,7 +117,7 @@ export class QuoteHandlerInjector extends InjectorSOR<
           v3GasModelFactory: new V3HeuristicGasModelFactory(),
           blockedTokenListProvider,
           tokenProvider,
-          v2PoolProvider,
+          // v2PoolProvider,
           v2QuoteProvider,
           v2SubgraphProvider,
           simulator,
