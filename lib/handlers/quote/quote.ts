@@ -423,7 +423,7 @@ export class QuoteHandler extends APIGLambdaHandler<
       default:
         throw new Error('Invalid swap type')
     }
-
+    console.log('setp1: swapRoute', swapRoute)
     if (!swapRoute) {
       log.info(
         {
@@ -441,7 +441,7 @@ export class QuoteHandler extends APIGLambdaHandler<
         detail: 'No route found',
       }
     }
-
+    console.log('setp2: 444')
     const {
       quote,
       quoteGasAdjusted,
@@ -456,6 +456,7 @@ export class QuoteHandler extends APIGLambdaHandler<
       hitsCachedRoute,
     } = swapRoute
 
+    console.log('setp3: 460 hang ')
     if (simulationStatus == SimulationStatus.Failed) {
       metric.putMetric('SimulationFailed', 1, MetricLoggerUnit.Count)
     } else if (simulationStatus == SimulationStatus.Succeeded) {
@@ -469,7 +470,7 @@ export class QuoteHandler extends APIGLambdaHandler<
     }
 
     const routeResponse: Array<(V3PoolInRoute | V2PoolInRoute)[]> = []
-
+    console.log('setp4: 473')
     for (const subRoute of route) {
       const { amount, quote, tokenPath } = subRoute
 
@@ -558,7 +559,7 @@ export class QuoteHandler extends APIGLambdaHandler<
 
       routeResponse.push(curRoute)
     }
-
+    console.log('setp5: 562')
     const routeString = routeAmountsToString(route)
 
     const result: QuoteResponse = {
@@ -582,7 +583,7 @@ export class QuoteHandler extends APIGLambdaHandler<
       quoteId,
       hitsCachedRoutes: hitsCachedRoute,
     }
-
+    console.log('setp5: 586')
     this.logRouteMetrics(
       log,
       metric,
