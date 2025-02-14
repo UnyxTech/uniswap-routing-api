@@ -123,7 +123,7 @@ export class QuoteHandler extends APIGLambdaHandler<
         minSplits,
         forceCrossProtocol,
         forceMixedRoutes,
-        protocols: protocolsStr,
+        // protocols: protocolsStr,
         simulateFromAddress,
         permitSignature,
         permitNonce,
@@ -204,30 +204,30 @@ export class QuoteHandler extends APIGLambdaHandler<
       }
     }
 
-    let protocols: Protocol[] = []
-    if (protocolsStr) {
-      for (const protocolStr of protocolsStr) {
-        switch (protocolStr.toLowerCase()) {
-          case 'v2':
-            protocols.push(Protocol.V2)
-            break
-          case 'v3':
-            protocols.push(Protocol.V3)
-            break
-          case 'mixed':
-            protocols.push(Protocol.MIXED)
-            break
-          default:
-            return {
-              statusCode: 400,
-              errorCode: 'INVALID_PROTOCOL',
-              detail: `Invalid protocol specified. Supported protocols: ${JSON.stringify(Object.values(Protocol))}`,
-            }
-        }
-      }
-    } else if (!forceCrossProtocol) {
-      protocols = [Protocol.V3]
-    }
+    let protocols: Protocol[] = [Protocol.V3]
+    // if (protocolsStr) {
+    //   for (const protocolStr of protocolsStr) {
+    //     switch (protocolStr.toLowerCase()) {
+    //       case 'v2':
+    //         protocols.push(Protocol.V2)
+    //         break
+    //       case 'v3':
+    //         protocols.push(Protocol.V3)
+    //         break
+    //       case 'mixed':
+    //         protocols.push(Protocol.MIXED)
+    //         break
+    //       default:
+    //         return {
+    //           statusCode: 400,
+    //           errorCode: 'INVALID_PROTOCOL',
+    //           detail: `Invalid protocol specified. Supported protocols: ${JSON.stringify(Object.values(Protocol))}`,
+    //         }
+    //     }
+    //   }
+    // } else if (!forceCrossProtocol) {
+    //   protocols = [Protocol.V3]
+    // }
 
     let parsedDebugRoutingConfig = {}
     if (debugRoutingConfig && unicornSecret && unicornSecret === process.env.UNICORN_SECRET) {
@@ -360,6 +360,22 @@ export class QuoteHandler extends APIGLambdaHandler<
           }. Chain: ${chainId}`
         )
 
+        console.log({
+          amountIn: amount.toExact(),
+          token0Address,
+          token1Address,
+          token0Symbol,
+          token1Symbol,
+          tokenInSymbol: currencyIn.symbol,
+          tokenOutSymbol: currencyOut.symbol,
+          tokenPairSymbol,
+          tokenPairSymbolChain,
+          type,
+          routingConfig: routingConfig,
+          swapParams,
+          intent,
+        })
+
         swapRoute = await router.route(amount, currencyOut, TradeType.EXACT_INPUT, swapParams, routingConfig)
         break
       case 'exactOut':
@@ -383,6 +399,23 @@ export class QuoteHandler extends APIGLambdaHandler<
           `Exact Out Swap: Want ${amount.toExact()} ${amount.currency.symbol} Give: ${
             currencyIn.symbol
           }. Chain: ${chainId}`
+        )
+
+        console.log(
+          {
+            amountOut: amount.toExact(),
+            token0Address,
+            token1Address,
+            token0Symbol,
+            token1Symbol,
+            tokenInSymbol: currencyIn.symbol,
+            tokenOutSymbol: currencyOut.symbol,
+            tokenPairSymbol,
+            tokenPairSymbolChain,
+            type,
+            routingConfig: routingConfig,
+            swapParams,
+          }
         )
 
         swapRoute = await router.route(amount, currencyIn, TradeType.EXACT_OUTPUT, swapParams, routingConfig)
