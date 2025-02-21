@@ -83,4 +83,5 @@ export type QuoteResponse = {
   routeString: string
   methodParameters?: MethodParameters
   hitsCachedRoutes?: boolean
+  swapper?: string
 }

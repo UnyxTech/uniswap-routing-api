@@ -136,6 +136,7 @@ export class QuoteHandler extends APIGLambdaHandler<
         unicornSecret,
         intent,
         enableFeeOnTransferFeeFetching,
+        swapper,
       },
       requestInjected: {
         router,
@@ -374,6 +375,7 @@ export class QuoteHandler extends APIGLambdaHandler<
           routingConfig: routingConfig,
           swapParams,
           intent,
+          swapper
         })
         console.log('api:378 type = exactIn end',currencyIn.symbol)
         swapRoute = await router.route(amount, currencyOut, TradeType.EXACT_INPUT, swapParams, routingConfig)
@@ -416,6 +418,7 @@ export class QuoteHandler extends APIGLambdaHandler<
             type,
             routingConfig: routingConfig,
             swapParams,
+            swapper,
           }
         )
 
@@ -583,6 +586,7 @@ export class QuoteHandler extends APIGLambdaHandler<
       routeString,
       quoteId,
       hitsCachedRoutes: hitsCachedRoute,
+      swapper: swapper,
     }
     console.log('api:586', currencyIn.symbol)
     this.logRouteMetrics(

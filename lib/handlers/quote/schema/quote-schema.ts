@@ -92,4 +92,5 @@ export type QuoteQueryParams = {
   unicornSecret?: string
   intent?: string
   enableFeeOnTransferFeeFetching?: boolean
+  swapper?: string
 }
