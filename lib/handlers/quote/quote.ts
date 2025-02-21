@@ -54,6 +54,7 @@ export class QuoteHandler extends APIGLambdaHandler<
     let result: Response<QuoteResponse> | ErrorResponse
 
     try {
+      console.log("api:quote:57", params.requestQueryParams)
       result = await this.handleRequestInternal(params)
 
       switch (result.statusCode) {
@@ -109,6 +110,7 @@ export class QuoteHandler extends APIGLambdaHandler<
   private async handleRequestInternal(
     params: HandleRequestParams<ContainerInjected, RequestInjected<IRouter<any>>, void, QuoteQueryParams>
   ): Promise<Response<QuoteResponse> | ErrorResponse> {
+    console.log("api:113:57", params.requestQueryParams)
     const {
       requestQueryParams: {
         tokenInAddress,
