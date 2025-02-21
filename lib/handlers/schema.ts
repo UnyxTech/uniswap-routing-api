@@ -61,6 +61,7 @@ export const QuoteResponseSchemaJoi = Joi.object().keys({
     to: Joi.string().required(),
   }).optional(),
   hitsCachedRoutes: Joi.boolean().optional(),
+  swapper: Joi.string().optional(),
 })
 
 export type QuoteResponse = {
