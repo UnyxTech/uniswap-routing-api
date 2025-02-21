@@ -150,7 +150,9 @@ export class QuoteHandler extends APIGLambdaHandler<
         metric,
       },
     } = params
-
+    console.log("api: 153")
+    console.log(params)
+    console.log("api: 155")
     // Parse user provided token address/symbol to Currency object.
     let before = Date.now()
     const startTime = Date.now()

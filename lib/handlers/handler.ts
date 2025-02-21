@@ -271,6 +271,8 @@ export abstract class APIGLambdaHandler<CInj, RInj extends BaseRInj, ReqBody, Re
     let queryParamsRaw: APIGatewayProxyEventQueryStringParameters | null = event.queryStringParameters
     const queryParamsSchema = this.requestQueryParamsSchema()
 
+    console.log("queryParamsSchema", queryParamsSchema)
+
     let queryParams: ReqQueryParams | undefined
     if (queryParamsRaw && queryParamsSchema) {
       const queryParamsValidation = queryParamsSchema.validate(queryParamsRaw, {
