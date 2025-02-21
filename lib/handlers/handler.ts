@@ -143,6 +143,8 @@ export abstract class APIGLambdaHandler<CInj, RInj extends BaseRInj, ReqBody, Re
 
           const containerInjected = await injector.getContainerInjected()
 
+          console.log("api:handler:146", requestQueryParams)
+
           let requestInjected: RInj
           try {
             requestInjected = await injector.getRequestInjected(

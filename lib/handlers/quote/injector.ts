@@ -39,6 +39,8 @@ export class QuoteHandlerInjector extends InjectorSOR<
     // to capture Tapcompare logs in the smart-order-router.
     const logLevel = Math.random() < 0.1 ? bunyan.INFO : bunyan.WARN
 
+    console.log('api:injector:42', requestQueryParams)
+
     const {
       tokenInAddress,
       tokenInChainId,
