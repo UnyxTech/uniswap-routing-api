@@ -62,7 +62,8 @@ export const QuoteQueryParamsJoi = Joi.object({
   unicornSecret: Joi.string().optional(),
   intent: Joi.string().valid('quote', 'swap', 'caching', 'pricing').optional().default('quote'),
   enableFeeOnTransferFeeFetching: Joi.boolean().optional().default(false),
-}).and('recipient', 'slippageTolerance', 'deadline', 'swapper')
+  swapper: Joi.string().optional(),
+}).and('recipient', 'slippageTolerance', 'deadline')
 
 export type QuoteQueryParams = {
   tokenInAddress: string
