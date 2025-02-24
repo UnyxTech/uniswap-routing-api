@@ -100,7 +100,7 @@ export abstract class APIGLambdaHandler<CInj, RInj extends BaseRInj, ReqBody, Re
         headers: {
           ...response.headers,
           'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+          'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,Accept,Accept-Language,Content-Type,Authorization,platform,debug-mode,x-app-version,statsig-sdk-type,x-origin-application,x-request-source,x-api-key,x-universal-router-version,statsig-api-key,connect-protocol-version',
           'Access-Control-Allow-Credentials': true,
           'Content-Type': 'application/json',
         },
