@@ -49,6 +49,12 @@ export const chainProtocols = [
   */
   {
     protocol: Protocol.V3,
+    chainId: ChainId.DOGE_TESTNET,
+    timeout: 90000,
+    provider: new V3SubgraphProvider(ChainId.DOGE_TESTNET, 3, 90000),
+  },
+  {
+    protocol: Protocol.V3,
     chainId: ChainId.DOGE_SEPOLIA,
     timeout: 90000,
     provider: new V3SubgraphProvider(ChainId.DOGE_SEPOLIA, 3, 90000),

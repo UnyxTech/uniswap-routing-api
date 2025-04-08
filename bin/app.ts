@@ -282,6 +282,7 @@ const jsonRpcProviders = {
   WEB3_RPC_43114: process.env.JSON_RPC_PROVIDER_43114!,
   WEB3_RPC_8453: process.env.JSON_RPC_PROVIDER_8453!,
   WEB3_RPC_84532: process.env.JSON_RPC_PROVIDER_84532!,
+  WEB3_RPC_221122420: process.env.JSON_RPC_PROVIDER_221122420!,
 }
 
 // Local dev stack
